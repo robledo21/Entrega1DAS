@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 
@@ -54,9 +56,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         EditText editTextTarea = dialogView.findViewById(R.id.editTextTarea);
+                        RadioGroup radioGroupPrioridad = dialogView.findViewById(R.id.radioGroupPrioridad);
+
                         String nuevaTarea = editTextTarea.getText().toString();
+                        int prioridadSeleccionada = radioGroupPrioridad.getCheckedRadioButtonId();
+
                         if (!nuevaTarea.isEmpty()) {
-                            añadirTarea(nuevaTarea);
+                            añadirTarea(nuevaTarea, obtenerPrioridadString(prioridadSeleccionada));
                         }
                     }
                 })
@@ -71,8 +77,23 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void añadirTarea(String nuevaTarea) {
-        tareas.add(nuevaTarea);
+    private void añadirTarea(String nuevaTarea, String prioridad) {
+        String tareaConPrioridad = nuevaTarea + " - Prioridad: " + prioridad;
+        tareas.add(tareaConPrioridad);
         adapter.notifyDataSetChanged();
     }
+
+    private String obtenerPrioridadString(int radioButtonId) {
+        if (radioButtonId == R.id.radioButtonAlta) {
+            return "Alta";
+        } else if (radioButtonId == R.id.radioButtonMedia) {
+            return "Media";
+        } else if (radioButtonId == R.id.radioButtonBaja) {
+            return "Baja";
+        } else {
+            return "No definida";
+        }
+    }
+
+
 }
