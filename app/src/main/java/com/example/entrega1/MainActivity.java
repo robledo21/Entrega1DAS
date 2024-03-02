@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.e("Error", "Prueba");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -115,8 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void añadirTarea(String nuevaTarea, String prioridad) {
-        Log.d("Debug", "Añadiendo tarea: " + nuevaTarea + " - Prioridad: " + prioridad);
-        String tareaConPrioridad = nuevaTarea + " - Prioridad: " + prioridad;
+        String tareaConPrioridad = nuevaTarea;
         tareas.add(tareaConPrioridad);
         adapter.notifyDataSetChanged();
     }
@@ -147,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Log.e("Error", "No se encontró 'Prioridad:' en la cadena de tarea");
         return "No definida";
     }
 
@@ -171,5 +169,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void finalizarTarea(View view) {
+        // Obtiene la posición de la vista en la lista
+        int position = ((ListView) view.getParent().getParent()).getPositionForView((RelativeLayout) view.getParent());
+
+        // Remueve la tarea de la lista
+        if (position != ListView.INVALID_POSITION) {
+            tareas.remove(position);
+            adapter.notifyDataSetChanged();
+        }
+    }
 
 }
