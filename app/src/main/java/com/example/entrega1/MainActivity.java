@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
             tareas = cargarTareasDesdeBaseDeDatos();
         }
 
-
         miDB = new MiDataBase(this);
 
         //tareas = new ArrayList<>();
@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         crearCanalNotificaciones();
+
+        cargarTareasDesdeBD();
 
     }
 
@@ -243,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
             String tareaFinalizada = tareas.get(position);
 
             // Eliminar la tarea de la base de datos
-            eliminarTareaDeBD(tareaFinalizada);
+            eliminarTareaDeBD(tareaFinalizada.split(Pattern.quote(" - Prioridad: "))[0]);
 
             // Eliminar la tarea de la lista
             tareas.remove(position);
@@ -339,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 // Asumiendo que la descripción de la tarea está en la columna "descripcion"
-                String tarea = cursor.getString(cursor.getColumnIndexOrThrow("tarea"));
+                String tarea = cursor.getString(cursor.getColumnIndexOrThrow(MiDataBase.COLUMN_TASK));
                 tareas.add(tarea);
             }
             cursor.close();
