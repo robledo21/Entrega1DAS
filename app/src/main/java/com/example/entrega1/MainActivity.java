@@ -11,10 +11,13 @@ import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,11 +42,24 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> tareas;
     private ArrayAdapter<String> adapter;
     private static final String ID_CANAL = "Canal 1";
+    private MiDataBase miDB;
+    private static final String KEY_TAREAS = "key_tareas";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Restaurar datos si hay un estado guardado
+        if (savedInstanceState != null) {
+            tareas = savedInstanceState.getStringArrayList(KEY_TAREAS);
+        } else {
+            // Si no hay un estado guardado, carga las tareas desde la base de datos
+            tareas = cargarTareasDesdeBaseDeDatos();
+        }
+
+
+        miDB = new MiDataBase(this);
 
         tareas = new ArrayList<>();
         adapter = new TareaAdapter(this, R.layout.elemento_lista, tareas);
@@ -128,9 +144,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void añadirTarea(String nuevaTarea, String prioridad) {
-        String tareaConPrioridad = nuevaTarea + " - Prioridad: " + prioridad;
-        tareas.add(tareaConPrioridad);
-        adapter.notifyDataSetChanged();
+        // Insertar la tarea en la base de datos
+        SQLiteDatabase db = miDB.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(MiDataBase.COLUMN_TASK, nuevaTarea);
+        values.put(MiDataBase.COLUMN_PRIORITY, prioridad);
+
+        long insertId = db.insert(MiDataBase.TABLE_TASKS, null, values);
+        db.close();
+
+        if (insertId != -1) {
+            // Actualizar la lista de tareas desde la base de datos
+            cargarTareasDesdeBD();
+            adapter.notifyDataSetChanged();
+        } else {
+            // Manejar error de inserción
+            Toast.makeText(this, "Error al agregar la tarea a la base de datos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void cargarTareasDesdeBD() {
+        // Load tasks from the database
+        tareas.clear();
+        SQLiteDatabase db = miDB.getReadableDatabase();
+        Cursor cursor = db.query(MiDataBase.TABLE_TASKS,
+                new String[]{MiDataBase.COLUMN_TASK, MiDataBase.COLUMN_PRIORITY},
+                null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") String tarea = cursor.getString(cursor.getColumnIndex(MiDataBase.COLUMN_TASK));
+            @SuppressLint("Range") String prioridad = cursor.getString(cursor.getColumnIndex(MiDataBase.COLUMN_PRIORITY));
+            tareas.add(tarea + " - Prioridad: " + prioridad);
+        }
+
+        cursor.close();
+        db.close();
     }
 
     private String obtenerPrioridadString(int radioButtonId) {
@@ -254,6 +303,34 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Guardar las tareas en el estado para que se pueda restaurar después de girar
+        outState.putStringArrayList(KEY_TAREAS, tareas);
+    }
+
+    // Función para cargar tareas desde la base de datos
+    private ArrayList<String> cargarTareasDesdeBaseDeDatos() {
+        ArrayList<String> tareas = new ArrayList<>();
+
+        MiDataBase miDB = new MiDataBase(this);
+        SQLiteDatabase db = miDB.getReadableDatabase();
+
+        // Obtener todas las tareas de la base de datos
+        Cursor cursor = miDB.obtenerTodasLasTareas();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                // Asumiendo que la descripción de la tarea está en la columna "descripcion"
+                String tarea = cursor.getString(cursor.getColumnIndexOrThrow("tarea"));
+                tareas.add(tarea);
+            }
+            cursor.close();
+        }
+
+        return tareas;
     }
 
 }
