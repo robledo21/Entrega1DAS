@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         miDB = new MiDataBase(this);
 
-        tareas = new ArrayList<>();
+        //tareas = new ArrayList<>();
         adapter = new TareaAdapter(this, R.layout.elemento_lista, tareas);
 
         ListView listView = findViewById(R.id.tareasListView);
@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // Método para cargar tareas desde la base de datos
     private void cargarTareasDesdeBD() {
         // Load tasks from the database
         tareas.clear();
@@ -231,14 +232,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Método para finalizar una tarea
     public void finalizarTarea(View view) {
         // Obtiene la posición de la vista en la lista
         int position = ((ListView) view.getParent().getParent()).getPositionForView((RelativeLayout) view.getParent());
 
-        // Remueve la tarea de la lista
+        // Remueve la tarea de la lista y de la base de datos
         if (position != ListView.INVALID_POSITION) {
             // Obtener la tarea antes de eliminarla
             String tareaFinalizada = tareas.get(position);
+
+            // Eliminar la tarea de la base de datos
+            eliminarTareaDeBD(tareaFinalizada);
 
             // Eliminar la tarea de la lista
             tareas.remove(position);
@@ -255,6 +260,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    // Método para eliminar una tarea de la base de datos
+    private void eliminarTareaDeBD(String tarea) {
+        SQLiteDatabase db = miDB.getWritableDatabase();
+        db.delete(MiDataBase.TABLE_TASKS,
+                MiDataBase.COLUMN_TASK + " = ?",
+                new String[]{tarea});
+        db.close();
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
