@@ -13,13 +13,24 @@
         android:textSize="16sp" />
 
     <Button
-        android:id="@+id/botonFinalizar"
+        android:id="@+id/botonEditar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="37dp"
         android:layout_below="@id/textViewTarea"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-37dp"
-        android:layout_marginEnd="1dp"
+        android:layout_marginTop="-41dp"
+        android:layout_marginEnd="13dp"
+        android:onClick="editarTarea"
+        android:text="Editar" />
+
+    <Button
+        android:id="@+id/botonFinalizar"
+        android:layout_width="105dp"
+        android:layout_height="37dp"
+        android:layout_below="@id/textViewTarea"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="5dp"
         android:onClick="finalizarTarea"
         android:text="Finalizar" />
 
@@ -29,6 +40,7 @@
         android:layout_height="55dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="327dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/priority" />
 
 </RelativeLayout>

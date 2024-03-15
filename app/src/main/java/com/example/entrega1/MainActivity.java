@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             this.layoutResourceId = resource;
         }
 
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
@@ -103,9 +104,29 @@ public class MainActivity extends AppCompatActivity {
             // Configurar el texto y la imagen según la tarea y la prioridad
             TextView textViewTarea = convertView.findViewById(R.id.textViewTarea);
             ImageView imageViewPrioridad = convertView.findViewById(R.id.imageViewPrioridad);
+            Button buttonFinalizar = convertView.findViewById(R.id.botonFinalizar);
+            Button buttonEditar = convertView.findViewById(R.id.botonEditar);
 
             textViewTarea.setText(tarea);
             actualizarImagenPrioridad(imageViewPrioridad, prioridad);
+
+            // Asignar un listener al botón de finalizar
+            buttonFinalizar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Aquí puedes implementar la lógica para finalizar la tarea
+                    finalizarTarea(view);
+                }
+            });
+
+            // Asignar un listener al botón de editar
+            buttonEditar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Aquí puedes implementar la lógica para editar la tarea
+                    editarTarea(view);
+                }
+            });
 
             return convertView;
         }
@@ -349,5 +370,63 @@ public class MainActivity extends AppCompatActivity {
 
         return tareas;
     }
+
+    // En MainActivity.java
+    private void editarTarea(View view) {
+        // Obtener la tarea seleccionada
+        int position = ((ListView) view.getParent().getParent()).getPositionForView((RelativeLayout) view.getParent());
+        if (position != ListView.INVALID_POSITION) {
+            String tarea = tareas.get(position);
+
+            // Crear diálogo de edición
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.editar_tarea_dialogo, null);
+            builder.setView(dialogView);
+
+            EditText editTextTarea = dialogView.findViewById(R.id.editTextTarea);
+            editTextTarea.setText(tarea);
+
+            builder.setTitle("Editar Tarea")
+                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String nuevaTarea = editTextTarea.getText().toString();
+                            if (!nuevaTarea.isEmpty()) {
+                                actualizarTareaEnBD(tarea, nuevaTarea);
+                                // Actualizar la lista de tareas en el adaptador
+                                tareas.set(position, nuevaTarea);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    })
+                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // Cancelar la edición
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    // En MainActivity.java
+    private void actualizarTareaEnBD(String tareaAnterior, String nuevaTarea) {
+        SQLiteDatabase db = miDB.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(MiDataBase.COLUMN_TASK, nuevaTarea);
+
+        int rowsAffected = db.update(MiDataBase.TABLE_TASKS, values,
+                MiDataBase.COLUMN_TASK + " = ?",
+                new String[]{tareaAnterior});
+
+        db.close();
+
+    }
+
+
 
 }
