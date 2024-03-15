@@ -376,7 +376,11 @@ public class MainActivity extends AppCompatActivity {
         // Obtener la tarea seleccionada
         int position = ((ListView) view.getParent().getParent()).getPositionForView((RelativeLayout) view.getParent());
         if (position != ListView.INVALID_POSITION) {
-            String tarea = tareas.get(position);
+            String tareaCompleta = tareas.get(position);
+            // Extraer el nombre de la tarea y la prioridad
+            String[] partes = tareaCompleta.split(" - Prioridad: ");
+            String tarea = partes[0];
+            String prioridad = partes[1];
 
             // Crear diálogo de edición
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -387,15 +391,31 @@ public class MainActivity extends AppCompatActivity {
             EditText editTextTarea = dialogView.findViewById(R.id.editTextTarea);
             editTextTarea.setText(tarea);
 
+            RadioGroup radioGroupPrioridad = dialogView.findViewById(R.id.radioGroupPrioridad);
+            // Establecer la prioridad seleccionada por el usuario
+            switch (prioridad) {
+                case "Alta":
+                    radioGroupPrioridad.check(R.id.radioButtonAlta);
+                    break;
+                case "Media":
+                    radioGroupPrioridad.check(R.id.radioButtonMedia);
+                    break;
+                case "Baja":
+                    radioGroupPrioridad.check(R.id.radioButtonBaja);
+                    break;
+            }
+
             builder.setTitle("Editar Tarea")
                     .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             String nuevaTarea = editTextTarea.getText().toString();
+                            int radioButtonId = radioGroupPrioridad.getCheckedRadioButtonId();
+                            String nuevaPrioridad = obtenerPrioridadString(radioButtonId);
                             if (!nuevaTarea.isEmpty()) {
-                                actualizarTareaEnBD(tarea, nuevaTarea);
+                                actualizarTareaEnBD(tarea, nuevaTarea, nuevaPrioridad);
                                 // Actualizar la lista de tareas en el adaptador
-                                tareas.set(position, nuevaTarea);
+                                tareas.set(position, nuevaTarea + " - Prioridad: " + nuevaPrioridad);
                                 adapter.notifyDataSetChanged();
                             }
                         }
@@ -412,12 +432,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     // En MainActivity.java
-    private void actualizarTareaEnBD(String tareaAnterior, String nuevaTarea) {
+    private void actualizarTareaEnBD(String tareaAnterior, String nuevaTarea, String nuevaPrioridad) {
         SQLiteDatabase db = miDB.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(MiDataBase.COLUMN_TASK, nuevaTarea);
+        values.put(MiDataBase.COLUMN_PRIORITY, nuevaPrioridad); // Agregar la nueva prioridad
 
         int rowsAffected = db.update(MiDataBase.TABLE_TASKS, values,
                 MiDataBase.COLUMN_TASK + " = ?",
@@ -425,7 +448,13 @@ public class MainActivity extends AppCompatActivity {
 
         db.close();
 
+        if (rowsAffected > 0) {
+            Toast.makeText(this, "Tarea actualizada correctamente", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error al actualizar la tarea", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
 
 
