@@ -2,13 +2,13 @@
     <!-- Definición del estilo de la aplicación -->
     <style name="MiTema" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Color de fondo de la barra de acción -->
-        <item name="colorPrimary">#F7418F</item>
+        <item name="colorPrimary">#497a89</item>
         <!-- Color del texto de la barra de acción -->
         <item name="android:textColorPrimary">#FFFFFF</item>
         <!-- Color de fondo de la ventana -->
-        <item name="android:windowBackground">#FFF3C7</item>
+        <item name="android:windowBackground">#E2F4C5</item>
         <!-- Color de los botones -->
-        <item name="colorButtonNormal">#FC819E</item>
+        <item name="colorButtonNormal">#58A399</item>
     </style>
 
     <!-- Estilo personalizado para los botones -->
@@ -27,7 +27,7 @@
     <!-- Estilo personalizado para los dialogos -->
     <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:background">#FC819E</item>
+        <item name="android:background">#A8CD9F</item>
     </style>
 
 </resources>

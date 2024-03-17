@@ -1,6 +1,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#FC819E" />
+    <solid android:color="#58A399" />
     <corners android:radius="8dp" />
 </shape>
 <!--Establece el fondo de los botones (para el estilo personalizado)-->
