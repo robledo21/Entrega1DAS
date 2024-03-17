@@ -1,9 +1,10 @@
-<!-- elemento_lista.xml -->
+<!-- Layout para un elemento de la lista -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp">
 
+    <!-- TextView para mostrar la descripción de la tarea -->
     <TextView
         android:id="@+id/textViewTarea"
         android:layout_width="wrap_content"
@@ -12,6 +13,7 @@
         android:layout_marginLeft="60dp"
         android:textSize="16sp" />
 
+    <!-- Botón para editar la tarea -->
     <Button
         android:id="@+id/botonEditar"
         android:layout_width="wrap_content"
@@ -24,6 +26,7 @@
         android:text="Editar"
         style="@style/MiEstiloBoton" />
 
+    <!-- Botón para finalizar la tarea -->
     <Button
         android:id="@+id/botonFinalizar"
         android:layout_width="105dp"
@@ -36,6 +39,7 @@
         android:text="Finalizar"
         style="@style/MiEstiloBoton" />
 
+    <!-- ImageView para mostrar la prioridad de la tarea -->
     <ImageView
         android:id="@+id/imageViewPrioridad"
         android:layout_width="wrap_content"

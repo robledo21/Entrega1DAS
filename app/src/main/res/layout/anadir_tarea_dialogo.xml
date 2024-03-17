@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Layout para el diálogo de añadir tarea -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!-- Campo de texto para ingresar la tarea -->
     <EditText
         android:id="@+id/editTextTarea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Introduce la tarea"/>
 
+    <!-- Grupo de botones de opción para seleccionar la prioridad de la tarea -->
     <RadioGroup
         android:id="@+id/radioGroupPrioridad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <!-- Botón de opción para prioridad Alta -->
         <RadioButton
             android:id="@+id/radioButtonAlta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Alta" />
 
+        <!-- Botón de opción para prioridad Media -->
         <RadioButton
             android:id="@+id/radioButtonMedia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Media" />
 
+        <!-- Botón de opción para prioridad Baja -->
         <RadioButton
             android:id="@+id/radioButtonBaja"
             android:layout_width="wrap_content"

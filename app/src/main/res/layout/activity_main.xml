@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Layout principal que contiene los elementos de la interfaz de usuario -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Botón para añadir una nueva tarea -->
     <Button
         android:id="@+id/botonAnadirTarea"
         android:layout_width="wrap_content"
@@ -13,6 +15,7 @@
         android:layout_marginTop="16dp"
         android:text="Añadir tarea" />
 
+    <!-- ListView para mostrar la lista de tareas -->
     <ListView
         android:id="@+id/tareasListView"
         android:layout_width="match_parent"

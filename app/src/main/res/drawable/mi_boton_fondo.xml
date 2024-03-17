@@ -3,3 +3,4 @@
     <solid android:color="#FC819E" />
     <corners android:radius="8dp" />
 </shape>
+<!--Establece el fondo de los botones (para el estilo personalizado)-->

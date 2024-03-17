@@ -38,13 +38,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+// Clase principal de la aplicación
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> tareas;
     private ArrayAdapter<String> adapter;
-    private static final String ID_CANAL = "Canal 1";
-    private MiDataBase miDB;
-    private static final String KEY_TAREAS = "key_tareas";
+    private static final String ID_CANAL = "Canal 1"; // Identificador del canal de notificaciones
+    private MiDataBase miDB; // Instancia de la base de datos
+    private static final String KEY_TAREAS = "key_tareas"; // Clave para guardar y restaurar el estado de la lista de tareas
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
         miDB = new MiDataBase(this);
 
-        //tareas = new ArrayList<>();
         adapter = new TareaAdapter(this, R.layout.elemento_lista, tareas);
 
         ListView listView = findViewById(R.id.tareasListView);
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Adaptador personalizado para la lista de tareas
     private class TareaAdapter extends ArrayAdapter<String> {
         private int layoutResourceId;
 
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        // Método para personalizar la vista de cada elemento en la lista de tareas
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
@@ -114,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
             buttonFinalizar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Aquí puedes implementar la lógica para finalizar la tarea
                     finalizarTarea(view);
                 }
             });
@@ -123,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
             buttonEditar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Aquí puedes implementar la lógica para editar la tarea
                     editarTarea(view);
                 }
             });
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    // Método para mostrar el diálogo de agregar tarea
     private void mostrarDialogo() {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.anadir_tarea_dialogo, null);
@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Cancelar
                     }
                 });
 
@@ -166,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    // Metodo para añadir una tarea
     private void añadirTarea(String nuevaTarea, String prioridad) {
         // Insertar la tarea en la base de datos
         SQLiteDatabase db = miDB.getWritableDatabase();
@@ -206,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
         db.close();
     }
 
+    // Metodo para obtener la prioridad en String
     private String obtenerPrioridadString(int radioButtonId) {
         if (radioButtonId == R.id.radioButtonAlta) {
             return "Alta";
@@ -218,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Metodo que devuelve la prioridad de una tarea
     private String obtenerPrioridadDeLaTarea(String tarea) {
         int indiceInicio = tarea.indexOf("Prioridad: ");
 
@@ -237,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    // Metodo que actualiza la imagen de prioridad de una tarea
     private void actualizarImagenPrioridad(View view, String prioridad) {
         ImageView imageViewPrioridad = view.findViewById(R.id.imageViewPrioridad);
         switch (prioridad) {
@@ -260,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         // Obtiene la posición de la vista en la lista
         int position = ((ListView) view.getParent().getParent()).getPositionForView((RelativeLayout) view.getParent());
 
-        // Remueve la tarea de la lista y de la base de datos
+        // Borra la tarea de la lista y de la base de datos
         if (position != ListView.INVALID_POSITION) {
             // Obtener la tarea antes de eliminarla
             String tareaFinalizada = tareas.get(position);
@@ -274,11 +277,9 @@ public class MainActivity extends AppCompatActivity {
 
             // Mostrar la notificación
             if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
-                // Notifications are enabled, proceed with posting notifications
                 mostrarNotificacionFinalizacion(tareaFinalizada);
             } else {
-                // Notifications are not enabled, request permission or handle accordingly
-                // You can prompt the user to enable notifications or navigate to settings
+                // Si no tiene permisos de notificaciones, se piden
                 requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 11);
             }
         }
@@ -294,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // Metodo que muestra un Toast según se hayan permitido o denegado las notificaciones
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -309,9 +311,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Metodo que muestra las notificaciones de finalización (cuando se termina una tarea)
     @SuppressLint("MissingPermission")
     private void mostrarNotificacionFinalizacion(String tareaFinalizada) {
-        // Create an explicit intent for an activity in your app
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ID_CANAL)
@@ -329,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(1, builder.build());
     }
 
+    // Metodo que crea el canal de notificaciones
     private void crearCanalNotificaciones() {
         requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 11);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -350,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putStringArrayList(KEY_TAREAS, tareas);
     }
 
-    // Función para cargar tareas desde la base de datos
+    // Metodo para cargar tareas desde la base de datos
     private ArrayList<String> cargarTareasDesdeBaseDeDatos() {
         ArrayList<String> tareas = new ArrayList<>();
 
@@ -361,7 +364,6 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = miDB.obtenerTodasLasTareas();
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                // Asumiendo que la descripción de la tarea está en la columna "descripcion"
                 String tarea = cursor.getString(cursor.getColumnIndexOrThrow(MiDataBase.COLUMN_TASK));
                 tareas.add(tarea);
             }
@@ -371,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
         return tareas;
     }
 
-    // En MainActivity.java
+    // Metodo para editar una tarea
     private void editarTarea(View view) {
         // Obtener la tarea seleccionada
         int position = ((ListView) view.getParent().getParent()).getPositionForView((RelativeLayout) view.getParent());
@@ -434,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    // En MainActivity.java
+    // Metodo para actualizar/editar una tarea en la BD
     private void actualizarTareaEnBD(String tareaAnterior, String nuevaTarea, String nuevaPrioridad) {
         SQLiteDatabase db = miDB.getWritableDatabase();
 
@@ -448,6 +450,7 @@ public class MainActivity extends AppCompatActivity {
 
         db.close();
 
+        // Toasts que informan del resultado de la edición
         if (rowsAffected > 0) {
             Toast.makeText(this, "Tarea actualizada correctamente", Toast.LENGTH_SHORT).show();
         } else {
