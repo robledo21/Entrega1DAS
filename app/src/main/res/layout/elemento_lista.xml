@@ -7,37 +7,34 @@
     <!-- TextView para mostrar la descripción de la tarea -->
     <TextView
         android:id="@+id/textViewTarea"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:layout_width="198dp"
+        android:layout_height="66dp"
         android:layout_marginLeft="60dp"
+        android:padding="8dp"
         android:textSize="16sp" />
 
     <!-- Botón para editar la tarea -->
     <Button
         android:id="@+id/botonEditar"
-        android:layout_width="wrap_content"
-        android:layout_height="37dp"
+        style="@style/MiEstiloBoton"
         android:layout_below="@id/textViewTarea"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="-41dp"
-        android:layout_marginEnd="13dp"
+        android:layout_marginTop="-64dp"
+        android:layout_marginEnd="4dp"
         android:onClick="editarTarea"
-        android:text="Editar"
-        style="@style/MiEstiloBoton" />
+        android:text="Editar" />
+
 
     <!-- Botón para finalizar la tarea -->
     <Button
         android:id="@+id/botonFinalizar"
-        android:layout_width="105dp"
-        android:layout_height="37dp"
+        style="@style/MiEstiloBoton"
         android:layout_below="@id/textViewTarea"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginTop="-25dp"
+        android:layout_marginEnd="4dp"
         android:onClick="finalizarTarea"
-        android:text="Finalizar"
-        style="@style/MiEstiloBoton" />
+        android:text="Finalizar" />
 
     <!-- ImageView para mostrar la prioridad de la tarea -->
     <ImageView

@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.anadir_tarea_dialogo, null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         builder.setView(dialogView)
                 .setTitle("Añadir Tarea")
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
             String prioridad = partes[1];
 
             // Crear diálogo de edición
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
             LayoutInflater inflater = getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.editar_tarea_dialogo, null);
             builder.setView(dialogView);

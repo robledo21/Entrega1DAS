@@ -17,5 +17,17 @@
         <item name="android:background">@drawable/mi_boton_fondo</item>
         <!-- Color del texto del botón -->
         <item name="android:textColor">#FFFFFF</item>
+        <!-- Ajusta el tamaño del texto -->
+        <item name="android:textSize">12sp</item>
+        <!-- Ajusta el tamaño del botón -->
+        <item name="android:layout_width">95dp</item>
+        <item name="android:layout_height">30dp</item>
     </style>
+
+    <!-- Estilo personalizado para los dialogos -->
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:background">#FC819E</item>
+    </style>
+
 </resources>
