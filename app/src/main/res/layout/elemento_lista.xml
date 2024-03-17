@@ -21,7 +21,8 @@
         android:layout_marginTop="-41dp"
         android:layout_marginEnd="13dp"
         android:onClick="editarTarea"
-        android:text="Editar" />
+        android:text="Editar"
+        style="@style/MiEstiloBoton" />
 
     <Button
         android:id="@+id/botonFinalizar"
@@ -32,7 +33,8 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="5dp"
         android:onClick="finalizarTarea"
-        android:text="Finalizar" />
+        android:text="Finalizar"
+        style="@style/MiEstiloBoton" />
 
     <ImageView
         android:id="@+id/imageViewPrioridad"

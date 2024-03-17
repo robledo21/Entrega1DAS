@@ -1,0 +1,21 @@
+<resources>
+    <!-- Definición del estilo de la aplicación -->
+    <style name="MiTema" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Color de fondo de la barra de acción -->
+        <item name="colorPrimary">#F7418F</item>
+        <!-- Color del texto de la barra de acción -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <!-- Color de fondo de la ventana -->
+        <item name="android:windowBackground">#FFF3C7</item>
+        <!-- Color de los botones -->
+        <item name="colorButtonNormal">#FC819E</item>
+    </style>
+
+    <!-- Estilo personalizado para los botones -->
+    <style name="MiEstiloBoton" parent="Widget.AppCompat.Button">
+        <!-- Fondo del botón -->
+        <item name="android:background">@drawable/mi_boton_fondo</item>
+        <!-- Color del texto del botón -->
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+</resources>
